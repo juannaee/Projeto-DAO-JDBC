@@ -1,0 +1,52 @@
+package application;
+
+import java.util.Date;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import db.Db;
+import model.entities.Department;
+import model.entities.Seller;
+
+public class Main {
+
+	private static final Logger logger = LoggerFactory.getLogger(Main.class);
+
+	public static void main(String[] args) {
+		TestConnection();
+
+		Department desenvolvimento = new Department("Desenvolvimento");
+		Seller seller1 = new Seller("Juan Guilhere", new Date(), 2500.00, desenvolvimento);
+		System.out.println(seller1);
+
+		Department designer = new Department("Designer");
+		Seller seller2 = new Seller("Teste 2", new Date(), 3900.00, designer);
+
+		Seller seller3 = new Seller("Teste 3", new Date(), 3900.00, designer);
+		System.out.println(seller2);
+		System.out.println(seller3);
+
+	}
+
+	public static void TestConnection() {
+		try {
+
+			Db.getConnection();
+			logger.info("----------------------------");
+			logger.info("Conexão SQL: OK");
+			logger.info("----------------------------");
+
+			if (Db.getConnection() != null) {
+				Db.closeConnection();
+
+			}
+
+		} catch (Exception e) {
+			logger.error("Conexão SQL: ERRO ");
+			e.printStackTrace();
+
+		}
+	}
+
+}

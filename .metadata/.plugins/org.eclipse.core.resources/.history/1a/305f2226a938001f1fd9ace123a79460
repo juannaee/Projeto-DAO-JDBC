@@ -1,0 +1,37 @@
+package model.entities;
+
+public class WorkLevel {
+
+	
+	private Integer id;
+	private String displayName;
+	private double bonusPercentage;
+
+	
+	public WorkLevel() {}
+	
+	private WorkLevel(Integer id, String displayName, double bonusPercentege) {
+
+		this.id = id;
+		this.displayName = displayName;
+		this.bonusPercentage = bonusPercentege;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public String getDisplayName() {
+		return this.displayName;
+	}
+
+	public double getBonusPercentage() {
+		return this.bonusPercentage;
+	}
+
+	public Double calculateBaseSalary(Double salary) {
+		return bonusPercentage * salary;
+
+	}
+
+}

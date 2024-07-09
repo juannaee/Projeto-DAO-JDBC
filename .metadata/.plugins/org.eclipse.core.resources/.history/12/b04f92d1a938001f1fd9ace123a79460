@@ -1,0 +1,20 @@
+package utilities;
+
+import java.io.InputStream;
+import java.util.List;
+
+import org.apache.logging.log4j.core.jackson.Log4jJsonObjectMapper;
+
+import model.entities.WorkLevel;
+
+public class WorkLevelLoader {
+	
+	public static List<WorkLevel> loadWorkLevels(String filePath) {
+		Log4jJsonObjectMapper
+		
+		try(InputStream is = WorkLevelLoader.class.getResourceAsStream(filePath)){
+			return mapper
+		}
+	}
+
+}

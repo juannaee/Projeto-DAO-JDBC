@@ -1,0 +1,11 @@
+package utilities;
+
+import java.util.List;
+
+import model.entities.WorkLevel;
+
+public class WorkLevelLoader {
+	
+	public static List<WorkLevel>
+
+}

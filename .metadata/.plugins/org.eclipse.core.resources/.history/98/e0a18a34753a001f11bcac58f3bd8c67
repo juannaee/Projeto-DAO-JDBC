@@ -1,0 +1,61 @@
+package application;
+
+
+
+import db.Db;
+import model.dao.DaoFactory;
+import model.dao.DepartmentDao;
+import model.dao.SellerDao;
+import model.dao.WorkLevelDao;
+import utilities.LoggerUtility;
+
+public class Main {
+
+	private static WorkLevelDao workLevel = DaoFactory.createWorkLevelDaoJDBC();
+	private static DepartmentDao department = DaoFactory.createDepartmentDaoJDBC();
+	private static SellerDao seller = DaoFactory.createSellerDao();
+
+	public static void main(String[] args) {
+
+		// Inicio Campo de LOG
+		System.out.println("Inicio Campo de LOG");
+		System.out.println("----------------------------");
+		Db.TestConnection();
+		dataBaseSetup();
+		dataBaseWorkLevels();
+		System.out.println("----------------------------");
+		System.out.println("Fim Campo de LOG");
+		// Fim Campo de LOG
+
+	}
+
+	public static void dataBaseWorkLevels() {
+
+		try {
+			workLevel.insertInititalWorkLevels();
+
+		} catch (Exception e) {
+			LoggerUtility.error("Inserção Work Levels ja feita", e.getMessage());
+			return;
+			
+
+		}
+	}
+
+	// Inicio Configuração das tabelas.
+	public static void dataBaseSetup() {
+		try {
+
+			seller.createTable();
+			workLevel.createTable();
+			department.createTable();
+
+		} catch (Exception e) {
+			LoggerUtility.error("Configuração do banco de dados: ERROR\nMotivo: ", e.getMessage());
+			throw new RuntimeException("Detalhes: ", e);
+
+		}
+	}
+	// Fim Configuração das tabelas
+
+}
