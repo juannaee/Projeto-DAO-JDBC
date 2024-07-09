@@ -32,10 +32,7 @@ public class WorkLevelDaoJDBC implements model.dao.WorkLevelDao {
 		} catch (Exception e) {
 			LoggerUtility.error("Erro na classe: WorkLevelDaoJDCB", e.getMessage(), "\n");
 			throw new RuntimeException("Detalhes erro: ", e);
-		} finally {
-			Db.closeConnection();
-			Db.closeStatement(stmt);
-		}
+		} 
 	}
 
 	@Override
@@ -74,10 +71,8 @@ public class WorkLevelDaoJDBC implements model.dao.WorkLevelDao {
 
 		}
 
-		finally {
-			Db.closeStatement(ps);
-			Db.closeConnection();
-		}
+	
+			
 
 	}
 

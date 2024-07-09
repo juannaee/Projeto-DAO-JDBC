@@ -39,9 +39,6 @@ public class SellerDaoJDBC implements SellerDao {
 		} catch (Exception e) {
 			LoggerUtility.error("Erro na classe SellerDaoJDBC\nMotivo; ", e.getMessage(), "\n");
 			throw new RuntimeException("Detalhes erro: ", e);
-		} finally {
-			Db.closeConnection();
-			Db.closeStatement(stmt);
 		}
 
 	}

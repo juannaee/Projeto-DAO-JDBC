@@ -33,11 +33,7 @@ public class DepartmentDaoJDBC implements DepartmentDao {
 		} catch (Exception e) {
 			LoggerUtility.error("Erro da na classe: DepartmentDaoJDBC", e.getMessage(), "\n");
 			throw new RuntimeException("Detalhes erro: ", e.getCause());
-		} finally {
-			Db.closeConnection();
-			Db.closeStatement(stmt);
-		}
-
+		} 
 	}
 
 	@Override
