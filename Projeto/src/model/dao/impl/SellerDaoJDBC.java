@@ -66,6 +66,7 @@ public class SellerDaoJDBC implements SellerDao {
 				if (rs.next()) {
 					int id = rs.getInt(1);
 					obj.assignId(id);
+					LoggerUtility.info("Inserção de novo vendedor com sucesso");
 				}
 			} else {
 				throw new DbException("Erro na inserção de um novo vendedor");
@@ -74,6 +75,9 @@ public class SellerDaoJDBC implements SellerDao {
 		} catch (SQLException e) {
 			LoggerUtility.error("Erro metodo insert ( Classe: SellerDaoJDBC\nMotivo: ", e.getMessage(), "\n");
 			throw new DbException("Detalhes erro: ", e);
+		} finally {
+			Db.closeStatement(st);
+			Db.closeConnection();
 		}
 
 	}

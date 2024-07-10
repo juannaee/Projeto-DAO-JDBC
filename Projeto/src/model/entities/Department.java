@@ -9,7 +9,6 @@ public class Department implements Serializable {
 	private Integer id;
 	private String nameDepartment;
 
-
 	public Department() {
 
 	}
@@ -17,6 +16,14 @@ public class Department implements Serializable {
 	public Department(String nameDepartment) {
 		this.nameDepartment = nameDepartment;
 
+	}
+
+	public void assignId(Integer id) {
+		if (this.id == null) {
+			this.id = id;
+		} else {
+			throw new IllegalStateException("O ID já foi atribuído a este departamento");
+		}
 	}
 
 	public Integer getId() {
@@ -61,12 +68,5 @@ public class Department implements Serializable {
 		return sb.toString();
 	}
 
-//	@Override
-//	public int hashCode() {
-//		final int prime = 31;
-//		int result = 1;
-//		result = prime * result + ((id == null ) ? 0 : id.hashCode());
-//		return result;
-//	}
 
 }

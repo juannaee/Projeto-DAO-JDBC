@@ -3,13 +3,14 @@ package application;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
+import java.util.Scanner;
 
 import db.Db;
 import model.dao.DaoFactory;
 import model.dao.DepartmentDao;
 import model.dao.SellerDao;
 import model.dao.WorkLevelDao;
+import model.entities.Department;
 import utilities.LoggerUtility;
 
 public class Main {
@@ -17,6 +18,8 @@ public class Main {
 	private static WorkLevelDao workLevel = DaoFactory.createWorkLevelDaoJDBC();
 	private static DepartmentDao department = DaoFactory.createDepartmentDaoJDBC();
 	private static SellerDao seller = DaoFactory.createSellerDao();
+	private static Department departmentObj;
+	private static Scanner sc = new Scanner(System.in);
 
 	public static void main(String[] args) {
 
@@ -25,8 +28,11 @@ public class Main {
 		System.out.println("----------------------------");
 		Db.TestConnection();
 		dataBaseSetup();
+		departmentDataBase();
 		System.out.println("----------------------------");
 		System.out.println("Fim Campo de LOG");
+
+		sc.close();
 		// Fim Campo de LOG
 
 	}
@@ -34,7 +40,7 @@ public class Main {
 	// Inicio Configuração das tabelas.
 	public static void dataBaseSetup() {
 		Connection conn = null;
-	
+
 		try {
 
 			conn = Db.getConnection();
@@ -72,7 +78,7 @@ public class Main {
 	}
 	// Fim Configuração das tabelas
 
-	// Metodo para verificar se existe a tabela no banco de dados
+	// Inicia Metodo para verificar se existe a tabela no banco de dados
 	private static boolean tableExists(Connection conn, String tableName) {
 		ResultSet rs = null;
 
@@ -84,6 +90,21 @@ public class Main {
 			throw new RuntimeException("\nDetalhes: ", e);
 
 		}
+
+	}
+
+	// Fim Metodo para verificar se existe a tabela no banco de dados
+	public static Department departmentDataBase() {
+		
+		
+		System.out.println("Digite o nome do departamento: ");
+		String nameDepartment = sc.nextLine();
+		departmentObj = new Department(nameDepartment);
+		department.insert(departmentObj);
+		LoggerUtility.info("Inserção de novo departamento com sucesso");
+		System.out.println("Departamentos ja existentes: ");
+		department.findAll();
+		return departmentObj;
 
 	}
 
