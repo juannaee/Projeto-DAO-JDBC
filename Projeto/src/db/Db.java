@@ -20,7 +20,7 @@ public class Db {
 			try {
 
 				Properties props = loadProperties();
-				String url = props.getProperty("dburl");
+				String url = props.getProperty("dburl")  + "?allowPublicKeyRetrieval=true&useSSL=false";
 				conn = DriverManager.getConnection(url, props);
 			} catch (SQLException e) {
 				throw new DbException(e.getMessage());

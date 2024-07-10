@@ -2,11 +2,15 @@ package model.dao.impl;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 import db.Db;
 import db.DbException;
+
 import model.entities.WorkLevel;
 import utilities.LoggerUtility;
 
@@ -32,7 +36,7 @@ public class WorkLevelDaoJDBC implements model.dao.WorkLevelDao {
 		} catch (Exception e) {
 			LoggerUtility.error("Erro na classe: WorkLevelDaoJDCB", e.getMessage(), "\n");
 			throw new RuntimeException("Detalhes erro: ", e);
-		} 
+		}
 	}
 
 	@Override
@@ -71,9 +75,18 @@ public class WorkLevelDaoJDBC implements model.dao.WorkLevelDao {
 
 		}
 
-	
-			
+	}
 
+	@Override
+	public String findAll() {
+		List<WorkLevel> list = new ArrayList<WorkLevel>();
+
+		for (WorkLevel level : WorkLevel.values()) {
+			list.add(level);
+
+		}
+
+		return list.toString();
 	}
 
 }
