@@ -9,37 +9,53 @@ import utilities.LoggerUtility;
 
 public class DepartmentService {
 	private static DepartmentDao department = DaoFactory.createDepartmentDaoJDBC();
-	private static Scanner sc = new Scanner(System.in);
+	
 	private static Department departmentObj;
-	
-	
-	
-	public static Department departmentDataBase() {
 
-		System.out.println("Escolha uma opção: \n1 - Ver Departamentos disponiveis\n2 - Adicionar novo Departamento");
-		int optionMenu = sc.nextInt();
+	public static void mainDepartment(Scanner sc) {
+		int option;
+		do {
+			System.out
+					.println("Escolha uma das opções\n1 - Mostrar Departamentos\n2 - Inserir Departamentos\n3 - Sair");
+			option = sc.nextInt();
+			System.out.println();
 
-		switch (optionMenu) {
-		case 1: {
-			System.out.println("Departamentos ja existentes: ");
-			System.out.println(department.findAll());
-			return null;
-		}
+			if (option == 1) {
+				showDepartments();
+				System.out.println();
 
-		case 2: {
-			System.out.println("Digite o nome do departamento: ");
-			sc.nextLine();
-			String nameDepartment = sc.nextLine();
-			departmentObj = new Department(nameDepartment);
-			department.insert(departmentObj);
-			LoggerUtility.info("Inserção de novo departamento com sucesso");
-			return departmentObj;
-		}
+			} else if (option == 2) {
+				departmentInsert(sc);
+				System.out.println();
 
-		default:
-			throw new IllegalArgumentException("Unexpected value: " + optionMenu);
-		}
+			} else if (option == 3) {
+				System.out.println("Saindo...");
+				System.out.println();
 
+			} else {
+				System.out.println("Opção invalida");
+				System.out.println();
+
+			}
+
+		} while (option != 3);
+
+	}
+
+	private static void showDepartments() {
+		System.out.println("DEPARTAMENTOS: ");
+		System.out.println(department.findAll());
+	}
+
+	private static Department departmentInsert(Scanner sc) {
+
+		System.out.println("Digite o nome do departamento: ");
+		sc.nextLine();
+		String nameDepartment = sc.nextLine();
+		departmentObj = new Department(nameDepartment);
+		department.insert(departmentObj);
+		LoggerUtility.info("Inserção de novo departamento com sucesso");
+		return departmentObj;
 	}
 
 }
