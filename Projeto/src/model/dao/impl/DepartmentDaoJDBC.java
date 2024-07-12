@@ -86,8 +86,31 @@ public class DepartmentDaoJDBC implements DepartmentDao {
 
 	@Override
 	public Department findById(Integer id) {
+		String sql = "SELECT * FROM department WHERE id = ?";
+		PreparedStatement st = null;
+		ResultSet rs = null;
+		Connection conn = null;
 
-		return null;
+		try {
+
+			conn = Db.getConnection();
+			st = conn.prepareStatement(sql);
+			st.setInt(1, id);
+			rs = st.executeQuery();
+
+			if (rs.next()) {
+				Department dep = instantiateDepartment(rs);
+				return dep;
+
+			}
+
+			return null;
+
+		} catch (SQLException e) {
+			LoggerUtility.error("Erro no metodo findById (Classe: DepartmentDaoJDBC)\nMotivo: ", e.getMessage());
+			throw new DbException("Erro ao buscar o departamento por ID: " + e.getMessage());
+		}
+
 	}
 
 	@Override

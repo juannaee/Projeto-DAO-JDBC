@@ -9,14 +9,14 @@ import utilities.LoggerUtility;
 
 public class DepartmentService {
 	private static DepartmentDao department = DaoFactory.createDepartmentDaoJDBC();
-	
+
 	private static Department departmentObj;
 
 	public static void mainDepartment(Scanner sc) {
 		int option;
 		do {
-			System.out
-					.println("Escolha uma das opções\n1 - Mostrar Departamentos\n2 - Inserir Departamentos\n3 - Sair");
+			System.out.println(
+					"Escolha uma das opções\n1 - Mostrar Departamentos\n2 - Inserir Departamentos\n3 - Procurar por ID\n4 - Sair");
 			option = sc.nextInt();
 			System.out.println();
 
@@ -29,16 +29,25 @@ public class DepartmentService {
 				System.out.println();
 
 			} else if (option == 3) {
+				findById(sc);
+				System.out.println();
+				
+
+			}
+
+			else if (option == 4) {
 				System.out.println("Saindo...");
 				System.out.println();
 
-			} else {
+			}
+
+			else {
 				System.out.println("Opção invalida");
 				System.out.println();
 
 			}
 
-		} while (option != 3);
+		} while (option != 4);
 
 	}
 
@@ -56,6 +65,22 @@ public class DepartmentService {
 		department.insert(departmentObj);
 		LoggerUtility.info("Inserção de novo departamento com sucesso");
 		return departmentObj;
+	}
+
+	private static Department findById(Scanner sc) {
+
+		System.out.println("Digite um numero ID");
+		int id = sc.nextInt();
+		Department objId = department.findById(id);
+		if (objId != null) {
+			System.out.println("Departamento encontrado:");
+			System.out.println(objId);
+			return objId;
+		} else {
+			System.out.println("Departamento inexistente");
+			return objId;
+		}
+
 	}
 
 }

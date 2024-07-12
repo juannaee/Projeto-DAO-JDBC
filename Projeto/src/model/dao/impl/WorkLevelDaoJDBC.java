@@ -2,7 +2,6 @@ package model.dao.impl;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -10,7 +9,6 @@ import java.util.List;
 
 import db.Db;
 import db.DbException;
-
 import model.entities.WorkLevel;
 import utilities.LoggerUtility;
 

@@ -5,6 +5,7 @@ package model.dao;
 
 import java.sql.SQLException;
 
+
 public interface WorkLevelDao {
 
 	void createTable() throws SQLException;
@@ -12,6 +13,6 @@ public interface WorkLevelDao {
 	void insertInititalWorkLevels() throws SQLException;
 	
 	
-	String findAll();
+	String findAll() throws SQLException;
 
 }
