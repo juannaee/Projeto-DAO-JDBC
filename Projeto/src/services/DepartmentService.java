@@ -67,7 +67,7 @@ public class DepartmentService {
 		return departmentObj;
 	}
 
-	private static Department findById(Scanner sc) {
+	public static Department findById(Scanner sc) {
 
 		System.out.println("Digite um numero ID");
 		int id = sc.nextInt();

@@ -1,13 +1,39 @@
 package application;
+
+import java.util.Date;
 import java.util.Scanner;
+
 import db.DataBaseInitializer;
 import db.Db;
+import model.dao.DaoFactory;
+import model.dao.DepartmentDao;
+import model.dao.SellerDao;
+import model.entities.Department;
+import model.entities.Seller;
+import model.entities.WorkLevel;
 import services.DepartmentService;
 import services.WorkLevelService;
 
 public class Main {
 
 	public static void main(String[] args) {
+
+		DepartmentDao departmentDao = DaoFactory.createDepartmentDaoJDBC();
+
+		Department department = departmentDao.findById(1);
+		WorkLevel wl = WorkLevel.JUNIOR;
+
+		Date date = new Date();
+
+		Seller seller = new Seller("Juan", date, 2000.00, department, wl);
+
+		SellerDao sellerDao = DaoFactory.createSellerDao();
+
+		sellerDao.insert(seller);
+
+		System.out.println("Funcionario inserido");
+		Seller achado = sellerDao.findById(1);
+		System.out.println(achado);
 
 		try (Scanner sc = new Scanner(System.in);)
 

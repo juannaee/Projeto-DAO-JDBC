@@ -9,8 +9,12 @@ import java.util.List;
 
 import db.Db;
 import db.DbException;
+import model.dao.DaoFactory;
+import model.dao.DepartmentDao;
 import model.dao.SellerDao;
+import model.entities.Department;
 import model.entities.Seller;
+import model.entities.WorkLevel;
 import utilities.LoggerUtility;
 
 public class SellerDaoJDBC implements SellerDao {
@@ -96,13 +100,63 @@ public class SellerDaoJDBC implements SellerDao {
 
 	@Override
 	public Seller findById(Integer id) {
-		return null;
+		String sql = "SELECT * FROM seller WHERE id = ?";
+		PreparedStatement st = null;
+		ResultSet rs = null;
+		Connection conn = null;
+
+		try {
+			conn = Db.getConnection();
+			st = conn.prepareStatement(sql);
+			st.setInt(1, id);
+			rs = st.executeQuery();
+
+			if (rs.next()) {
+				Seller seller = instantiateSeller(rs);
+				return seller;
+			}
+
+			return null;
+		} catch (SQLException e) {
+			LoggerUtility.error("Erro no metodo findById (Classe: SellerDaoJDBC)\nMotivo: ", e.getMessage());
+			throw new DbException("Erro ao buscar o funcionario por ID: " + e.getMessage());
+		}
+
 	}
 
 	@Override
 	public List<Seller> findAll() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	private Seller instantiateSeller(ResultSet rs) throws SQLException {
+		Seller seller = new Seller();
+		seller.assignId(rs.getInt("id"));
+		seller.setNameSeller(rs.getString("name_seller"));
+		seller.setBaseSalary(rs.getDouble("base_salary"));
+		seller.setBirthDate(rs.getDate("birth_date"));
+
+		// Buscar e associar Department
+		int departmentId = rs.getInt("department_id");
+		if (departmentId > 0) {
+			new DaoFactory();
+			DepartmentDao departmentDao = DaoFactory.createDepartmentDaoJDBC();
+			Department department = departmentDao.findById(departmentId);
+			seller.setDepartment(department);
+		}
+
+		// Associar WorkLevel
+		int workLevelId = rs.getInt("work_level_id");
+		for (WorkLevel wl : WorkLevel.values()) {
+			if (wl.getId() == workLevelId) {
+				seller.setWorkLevel(wl);
+				break;
+			}
+		}
+
+		return seller;
+
 	}
 
 }
