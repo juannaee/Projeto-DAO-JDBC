@@ -1,39 +1,19 @@
 package application;
 
-import java.util.Date;
 import java.util.Scanner;
 
 import db.DataBaseInitializer;
 import db.Db;
-import model.dao.DaoFactory;
-import model.dao.DepartmentDao;
-import model.dao.SellerDao;
-import model.entities.Department;
-import model.entities.Seller;
-import model.entities.WorkLevel;
 import services.DepartmentService;
+import services.SellerService;
 import services.WorkLevelService;
 
 public class Main {
 
 	public static void main(String[] args) {
 
-		DepartmentDao departmentDao = DaoFactory.createDepartmentDaoJDBC();
-
-		Department department = departmentDao.findById(1);
-		WorkLevel wl = WorkLevel.JUNIOR;
-
-		Date date = new Date();
-
-		Seller seller = new Seller("Juan", date, 2000.00, department, wl);
-
-		SellerDao sellerDao = DaoFactory.createSellerDao();
-
-		sellerDao.insert(seller);
-
-		System.out.println("Funcionario inserido");
-		Seller achado = sellerDao.findById(1);
-		System.out.println(achado);
+	
+		
 
 		try (Scanner sc = new Scanner(System.in);)
 
@@ -46,7 +26,7 @@ public class Main {
 
 			do {
 				System.out.println(
-						"Escolha uma das opções do menu:\n1 - Acessar serviço de departamento\n2 - Acesar serviço de Niveis de trabalho\n9 - Sair");
+						"Escolha uma das opções do menu:\n1 - Acessar serviço de departamento\n2 - Acessar serviço de Niveis de trabalho\n3 - Acessar serviço de funcionarios\n9 - Sair");
 				option = sc.nextInt();
 				System.out.println();
 
@@ -62,6 +42,12 @@ public class Main {
 					WorkLevelService.mainWorkLevel(sc);
 
 				}
+				else if (option == 3) {
+					System.out.println("Serviço de funcionarios");
+					SellerService.main(sc);
+
+				}
+
 
 				else if (option == 9) {
 

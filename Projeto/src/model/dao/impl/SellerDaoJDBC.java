@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 import db.Db;
@@ -126,7 +127,20 @@ public class SellerDaoJDBC implements SellerDao {
 
 	@Override
 	public List<Seller> findAll() {
-		// TODO Auto-generated method stub
+		String sql = "SELECT * FROM seller";
+		List<Seller> list = new ArrayList<Seller>();
+		Connection conn = null;
+		PreparedStatement st = null;
+		ResultSet rs = null;
+		
+		try {
+			conn = Db.getConnection();
+			st = conn.prepareStatement(sql);
+			rs = st.executeQuery();
+		}catch(SQLException e) {
+			
+		}
+
 		return null;
 	}
 
