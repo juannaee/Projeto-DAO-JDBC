@@ -61,8 +61,9 @@ public class Department implements Serializable {
 
 	@Override
 	public String toString() {
+		String departmentName = (getNameDepartment() == null) ? "N/D" : getNameDepartment();
 		StringBuilder sb = new StringBuilder();
-		sb.append("\n" + "( " +  getId() + " - " + getNameDepartment() + " )" + "\n");
+		sb.append("( " + getId() + " - " + departmentName + " )" + "\n");
 		return sb.toString();
 	}
 

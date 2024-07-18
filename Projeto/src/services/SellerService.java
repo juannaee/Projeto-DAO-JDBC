@@ -15,18 +15,32 @@ public class SellerService {
 
 	private static SellerDao sellerDao = DaoFactory.createSellerDao();
 
-	public static void main(Scanner sc) {
+	public static void mainSeller(Scanner sc) {
 		int option;
 
 		do {
 			System.out.println(
 					"Escolha uma das opções\n1 - Mostrar Funcionarios\n2 - Inserir Funcionarios\n3 - Procurar por ID\n4 - Sair");
 			option = sc.nextInt();
+			sc.nextLine();
 
 			if (option == 1) {
 				showSeller();
 				System.out.println();
 
+			} else if (option == 2) {
+				sellerInsert(sc);
+				System.out.println();
+			} else if (option == 3) {
+				findById(sc);
+				System.out.println();
+
+			} else if (option == 4) {
+				System.out.println("Saindo...");
+				System.out.println();
+			} else {
+				System.out.println("Opção invalida");
+				System.out.println();
 			}
 
 		} while (option != 4);
@@ -48,6 +62,7 @@ public class SellerService {
 
 			while (!dataConfirmed) {
 				System.out.println("Digite o nome do funcionario: ");
+
 				nameSeller = sc.nextLine();
 				System.out.println("Digite o salario base do funcionario: ");
 				salaryBase = sc.nextDouble();
@@ -56,15 +71,19 @@ public class SellerService {
 				System.out.println("Escolha o departamento: ");
 				System.out.println("Departamentos ativos: ");
 				System.out.println(departmentDao.findAll());
+
 				int departmentChoice = sc.nextInt();
+				sc.nextLine();
 
 				if (departmentDao.findById(departmentChoice) == null) {
-					System.out.println("Departamento Inexistente!");
-					continue;
+					System.out.println(
+							"Departamento inexistente, assim possivel realocar o funcionario para um departamento existente");
+					department = null;
 				}
 				department = departmentDao.findById(departmentChoice);
 
 				System.out.println("Escolha o nivel de trabalho:\n1 - Junior\n2 - Pleno\n3 - Senior");
+				System.out.println();
 				int workLevelChoice = sc.nextInt();
 				sc.nextLine();
 
@@ -89,9 +108,11 @@ public class SellerService {
 					System.out.println();
 					continue;
 				}
+				System.out.println();
 				System.out.println("Confirme os dados: ");
 				System.out.println("Nome: " + nameSeller + "\n" + "Salario Base: " + salaryBase + "\n"
 						+ "Departamento: " + department + "\n" + "Nivel de trabalho: " + workLevel.getDisplayName());
+				System.out.println();
 				System.out.println("1 - Confirmar\n2 - Corrigir");
 				int confirm = sc.nextInt();
 				sc.nextLine();
@@ -105,9 +126,11 @@ public class SellerService {
 			System.out.println("Novo funcionario inserido: " + seller);
 			LoggerUtility.info("Inserção de funcionario com sucesso ");
 
+			System.out.println();
 			System.out.println("Deseja inserir outro funcionario?\n1 - Sim\n2 - Não");
 			int continueOption = sc.nextInt();
 			sc.nextLine();
+			System.out.println();
 
 			if (continueOption != 1) {
 				continueInserting = false;
@@ -118,6 +141,7 @@ public class SellerService {
 	private static Seller findById(Scanner sc) {
 		System.out.println("Digite um numero ID");
 		int id = sc.nextInt();
+		System.out.println();
 		Seller objId = sellerDao.findById(id);
 		if (objId != null) {
 			System.out.println("Funcionario encontrado: ");

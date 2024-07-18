@@ -44,7 +44,7 @@ public class Main {
 				}
 				else if (option == 3) {
 					System.out.println("Serviço de funcionarios");
-					SellerService.main(sc);
+					SellerService.mainSeller(sc);
 
 				}
 

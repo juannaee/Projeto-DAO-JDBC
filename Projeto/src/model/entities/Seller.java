@@ -115,7 +115,7 @@ public class Seller implements Serializable {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("-----------------------------------\n");
+		sb.append("\n");
 		sb.append("ID Funcionario: " + id + "\n");
 		sb.append("Nome: " + nameSeller + "\n");
 		sb.append("Salario: " + baseSalary + "\n");
@@ -127,7 +127,7 @@ public class Seller implements Serializable {
 		sb.append("\n");
 		sb.append("Informações departamento: " + "\n");
 		sb.append(department);
-		sb.append("-----------------------------------\n");
+		sb.append("\n");
 		return sb.toString();
 	}
 

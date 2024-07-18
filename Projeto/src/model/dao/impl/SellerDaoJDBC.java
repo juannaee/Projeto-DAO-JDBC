@@ -137,11 +137,20 @@ public class SellerDaoJDBC implements SellerDao {
 			conn = Db.getConnection();
 			st = conn.prepareStatement(sql);
 			rs = st.executeQuery();
+			
+			
+			while(rs.next()) {
+				Seller seller = instantiateSeller(rs);
+				list.add(seller);
+			}
+			
+			return list;
 		}catch(SQLException e) {
+			throw new DbException("Erro ao buscar todos os funcionarios\nCausa: ", e.getCause());
 			
 		}
 
-		return null;
+		
 	}
 
 	private Seller instantiateSeller(ResultSet rs) throws SQLException {
