@@ -95,7 +95,30 @@ public class SellerDaoJDBC implements SellerDao {
 
 	@Override
 	public void deleteById(Integer id) {
-		// TODO Auto-generated method stub
+		PreparedStatement st = null;
+		Connection conn = null;
+
+		try {
+
+			conn = Db.getConnection();
+			String sql = "DELETE FROM seller WHERE id = ?";
+			st = conn.prepareStatement(sql);
+			st.setInt(1, id);
+
+			int rowsAffected = st.executeUpdate();
+
+			if (rowsAffected == 0) {
+				System.out.println("Funcionario não encontrado");
+				return;
+			} else {
+
+				LoggerUtility.info("funcionario excluido com sucesso");
+			}
+
+		} catch (SQLException e) {
+			LoggerUtility.error("Erro no metodo deleteById, classe: SellerDaoJDBC\nCausa:\n", e.getCause());
+			throw new DbException(e.getMessage());
+		}
 
 	}
 
@@ -132,25 +155,28 @@ public class SellerDaoJDBC implements SellerDao {
 		Connection conn = null;
 		PreparedStatement st = null;
 		ResultSet rs = null;
-		
+
 		try {
 			conn = Db.getConnection();
 			st = conn.prepareStatement(sql);
 			rs = st.executeQuery();
-			
-			
-			while(rs.next()) {
+
+			while (rs.next()) {
 				Seller seller = instantiateSeller(rs);
 				list.add(seller);
 			}
-			
+
+			if (list.isEmpty()) {
+				System.out.println();
+				System.out.println("Não existem funcionarios ativos");
+			}
 			return list;
-		}catch(SQLException e) {
+
+		} catch (SQLException e) {
 			throw new DbException("Erro ao buscar todos os funcionarios\nCausa: ", e.getCause());
-			
+
 		}
 
-		
 	}
 
 	private Seller instantiateSeller(ResultSet rs) throws SQLException {

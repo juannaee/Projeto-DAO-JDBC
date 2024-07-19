@@ -20,7 +20,7 @@ public class SellerService {
 
 		do {
 			System.out.println(
-					"Escolha uma das opções\n1 - Mostrar Funcionarios\n2 - Inserir Funcionarios\n3 - Procurar por ID\n4 - Sair");
+					"Escolha uma das opções\n1 - Mostrar Funcionarios\n2 - Inserir Funcionarios\n3 - Procurar por ID\n4 - Deletar por ID\n9 - Sair");
 			option = sc.nextInt();
 			sc.nextLine();
 
@@ -36,6 +36,10 @@ public class SellerService {
 				System.out.println();
 
 			} else if (option == 4) {
+				deleteById(sc);
+				System.out.println();
+
+			} else if (option == 9) {
 				System.out.println("Saindo...");
 				System.out.println();
 			} else {
@@ -43,7 +47,7 @@ public class SellerService {
 				System.out.println();
 			}
 
-		} while (option != 4);
+		} while (option != 9);
 
 	}
 
@@ -157,6 +161,20 @@ public class SellerService {
 	private static void showSeller() {
 		System.out.println("FUNCIONARIOS: ");
 		System.out.println(sellerDao.findAll());
+	}
+
+	private static void deleteById(Scanner sc) {
+
+		if (sellerDao.findAll().isEmpty()) {
+			return;
+		}
+		showSeller();
+		System.out.println("Digite um id para excluir um funcionario: ");
+		int id = sc.nextInt();
+		System.out.println();
+		sellerDao.deleteById(id);
+		System.out.println();
+
 	}
 
 }
