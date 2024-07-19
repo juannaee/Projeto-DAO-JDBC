@@ -59,6 +59,7 @@ public class DepartmentDaoJDBC implements DepartmentDao {
 				if (rs.next()) {
 					int id = rs.getInt(1);
 					obj.assignId(id);
+					LoggerUtility.info("Inserção de novo departamento com sucesso");
 
 				}
 
@@ -81,6 +82,30 @@ public class DepartmentDaoJDBC implements DepartmentDao {
 
 	@Override
 	public void deleteById(Integer id) {
+		PreparedStatement st = null;
+		Connection conn = null;
+		String sql = "DELETE FROM department WHERE id = ?";
+		String sqlCheck = "SELECT COUNT(*) AS count FROM seller WHERE department_id = ?";
+		try {
+			conn = Db.getConnection();
+			st = conn.prepareStatement(sql);
+			st.setInt(1, id);
+
+			int rowsAffected = st.executeUpdate();
+
+			if (rowsAffected == 0) {
+				System.out.println("Departamento não encontrado");
+				return;
+
+			} else {
+				LoggerUtility.info("Departamento excluido com sucesso");
+			}
+
+		} catch (SQLException e) {
+			LoggerUtility.error("Erro no metodo deleteById, classe: DepartmentDaoJDBC\nCausa:\n", e.getCause());
+			throw new DbException(e.getMessage());
+
+		}
 
 	}
 
@@ -129,6 +154,11 @@ public class DepartmentDaoJDBC implements DepartmentDao {
 				Department dep = instantiateDepartment(rs);
 				list.add(dep);
 
+			}
+
+			if (list.isEmpty()) {
+				System.out.println();
+				System.out.println("Não existem departamentos ativos");
 			}
 
 			return list;

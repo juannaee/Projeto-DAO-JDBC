@@ -9,7 +9,7 @@ import model.dao.SellerDao;
 import model.entities.Department;
 import model.entities.Seller;
 import model.entities.WorkLevel;
-import utilities.LoggerUtility;
+
 
 public class SellerService {
 
@@ -128,8 +128,6 @@ public class SellerService {
 			Seller seller = new Seller(nameSeller, date, salaryBase, department, workLevel);
 			sellerDao.insert(seller);
 			System.out.println("Novo funcionario inserido: " + seller);
-			LoggerUtility.info("Inserção de funcionario com sucesso ");
-
 			System.out.println();
 			System.out.println("Deseja inserir outro funcionario?\n1 - Sim\n2 - Não");
 			int continueOption = sc.nextInt();

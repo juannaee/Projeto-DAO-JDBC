@@ -5,7 +5,6 @@ import java.util.Scanner;
 import model.dao.DaoFactory;
 import model.dao.DepartmentDao;
 import model.entities.Department;
-import utilities.LoggerUtility;
 
 public class DepartmentService {
 	private static DepartmentDao department = DaoFactory.createDepartmentDaoJDBC();
@@ -16,7 +15,7 @@ public class DepartmentService {
 		int option;
 		do {
 			System.out.println(
-					"Escolha uma das opções\n1 - Mostrar Departamentos\n2 - Inserir Departamentos\n3 - Procurar por ID\n4 - Sair");
+					"Escolha uma das opções\n1 - Mostrar Departamentos\n2 - Inserir Departamentos\n3 - Procurar por ID\n4 - Deletar Departamento\n9 - Sair");
 			option = sc.nextInt();
 			System.out.println();
 
@@ -31,11 +30,14 @@ public class DepartmentService {
 			} else if (option == 3) {
 				findById(sc);
 				System.out.println();
-				
+
+			} else if (option == 4) {
+				deleteById(sc);
+				System.out.println();
 
 			}
 
-			else if (option == 4) {
+			else if (option == 9) {
 				System.out.println("Saindo...");
 				System.out.println();
 
@@ -47,7 +49,7 @@ public class DepartmentService {
 
 			}
 
-		} while (option != 4);
+		} while (option != 9);
 
 	}
 
@@ -63,11 +65,11 @@ public class DepartmentService {
 		String nameDepartment = sc.nextLine();
 		departmentObj = new Department(nameDepartment);
 		department.insert(departmentObj);
-		LoggerUtility.info("Inserção de novo departamento com sucesso");
+
 		return departmentObj;
 	}
 
-	public static Department findById(Scanner sc) {
+	private static Department findById(Scanner sc) {
 
 		System.out.println("Digite um numero ID");
 		int id = sc.nextInt();
@@ -80,6 +82,21 @@ public class DepartmentService {
 			System.out.println("Departamento inexistente");
 			return objId;
 		}
+
+	}
+
+	private static void deleteById(Scanner sc) {
+
+		if (department.findAll().isEmpty()) {
+			return;
+		}
+
+		showDepartments();
+		System.out.println("Digite um id para excluir um departamento: ");
+		int id = sc.nextInt();
+		System.out.println();
+		department.deleteById(id);
+		System.out.println();
 
 	}
 
