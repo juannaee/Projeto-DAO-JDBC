@@ -3,7 +3,6 @@ package application;
 import java.util.Scanner;
 
 import db.DataBaseInitializer;
-import db.Db;
 import services.DepartmentService;
 import services.SellerService;
 import services.WorkLevelService;
@@ -12,14 +11,10 @@ public class Main {
 
 	public static void main(String[] args) {
 
-	
-		
-
 		try (Scanner sc = new Scanner(System.in);)
 
 		{
 
-			Db.TestConnection();
 			DataBaseInitializer.dataBaseSetup();
 
 			int option;
@@ -41,13 +36,11 @@ public class Main {
 					System.out.println("Serviço de niveis de trabalho");
 					WorkLevelService.mainWorkLevel(sc);
 
-				}
-				else if (option == 3) {
+				} else if (option == 3) {
 					System.out.println("Serviço de funcionarios");
 					SellerService.mainSeller(sc);
 
 				}
-
 
 				else if (option == 9) {
 

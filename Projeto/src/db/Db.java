@@ -8,9 +8,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Properties;
-
-import utilities.LoggerUtility;
-
 public class Db {
 
 	private static Connection conn = null;
@@ -20,7 +17,7 @@ public class Db {
 			try {
 
 				Properties props = loadProperties();
-				String url = props.getProperty("dburl")  + "?allowPublicKeyRetrieval=true&useSSL=false";
+				String url = props.getProperty("dburl") + "?allowPublicKeyRetrieval=true&useSSL=false";
 				conn = DriverManager.getConnection(url, props);
 			} catch (SQLException e) {
 				throw new DbException(e.getMessage());
@@ -29,7 +26,9 @@ public class Db {
 			}
 		}
 
+		
 		return conn;
+		
 	}
 
 	private static Properties loadProperties() {
@@ -42,18 +41,6 @@ public class Db {
 			throw new DbException(e.getMessage());
 		} catch (Exception e) {
 			throw new DbException(e.getMessage());
-		}
-	}
-
-	public static void TestConnection() {
-		try {
-			Db.getConnection();
-			LoggerUtility.info("Conexão SQL: OK");
-
-		} catch (Exception e) {
-			LoggerUtility.error("Conexão SQL: ERRO\nMotivo:  ", e.getMessage());
-			throw new DbException("Detalhes: ", e);
-
 		}
 	}
 

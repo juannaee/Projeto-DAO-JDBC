@@ -51,6 +51,9 @@ public class DataBaseInitializer {
 			throw new RuntimeException("\nDetalhes: ", e);
 
 		} finally {
+			LoggerUtility.info(
+					"Método DataBaseInitializer executado com sucesso. Fechando conexão SQL para novos serviços...");
+
 			Db.closeConnection();
 		}
 

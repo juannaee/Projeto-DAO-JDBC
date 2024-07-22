@@ -20,6 +20,11 @@ import utilities.LoggerUtility;
 
 public class SellerDaoJDBC implements SellerDao {
 
+	private static Connection conn = null;
+	private static Statement stmt = null;
+	private static ResultSet rs = null;
+	private static PreparedStatement st = null;
+
 	@Override
 	public void createTable() {
 		String createSellerTable = "CREATE TABLE IF NOT EXISTS seller (" + "id INT PRIMARY KEY AUTO_INCREMENT, "
@@ -27,10 +32,6 @@ public class SellerDaoJDBC implements SellerDao {
 				+ "department_id INT, " + "work_level_id INT, "
 				+ "FOREIGN KEY (department_id) REFERENCES department(id), "
 				+ "FOREIGN KEY (work_level_id) REFERENCES work_level(id))";
-
-		Connection conn = null;
-		Statement stmt = null;
-
 		try {
 			conn = Db.getConnection();
 			stmt = conn.createStatement();
@@ -50,9 +51,6 @@ public class SellerDaoJDBC implements SellerDao {
 
 	@Override
 	public void insert(Seller obj) {
-		PreparedStatement st = null;
-		Connection conn = null;
-
 		try {
 			conn = Db.getConnection();
 			String sql = "INSERT INTO seller (name_seller, birth_date, base_salary, department_id, work_level_id)"
@@ -74,15 +72,13 @@ public class SellerDaoJDBC implements SellerDao {
 					LoggerUtility.info("Inserção de novo vendedor com sucesso");
 				}
 			} else {
-				throw new DbException("Erro na inserção de um novo vendedor");
+				LoggerUtility.warn("Erro na inserção de um novo vendedor!!");
+				return;
 			}
 
 		} catch (SQLException e) {
 			LoggerUtility.error("Erro metodo insert ( Classe: SellerDaoJDBC\nMotivo: ", e.getMessage(), "\n");
 			throw new DbException("Detalhes erro: ", e);
-		} finally {
-			Db.closeStatement(st);
-			Db.closeConnection();
 		}
 
 	}
@@ -95,24 +91,20 @@ public class SellerDaoJDBC implements SellerDao {
 
 	@Override
 	public void deleteById(Integer id) {
-		PreparedStatement st = null;
-		Connection conn = null;
-
+		String sql = "DELETE FROM seller WHERE id = ?";
+		conn = Db.getConnection();
 		try {
 
-			conn = Db.getConnection();
-			String sql = "DELETE FROM seller WHERE id = ?";
 			st = conn.prepareStatement(sql);
 			st.setInt(1, id);
-
 			int rowsAffected = st.executeUpdate();
 
 			if (rowsAffected == 0) {
-				System.out.println("Funcionario não encontrado");
+				LoggerUtility.info("Funcionario não encontrado\nID: ", id);
 				return;
 			} else {
 
-				LoggerUtility.info("funcionario excluido com sucesso");
+				LoggerUtility.info("funcionario excluido com sucesso\nID: ", id);
 			}
 
 		} catch (SQLException e) {
@@ -125,12 +117,10 @@ public class SellerDaoJDBC implements SellerDao {
 	@Override
 	public Seller findById(Integer id) {
 		String sql = "SELECT * FROM seller WHERE id = ?";
-		PreparedStatement st = null;
-		ResultSet rs = null;
-		Connection conn = null;
+		conn = Db.getConnection();
 
 		try {
-			conn = Db.getConnection();
+
 			st = conn.prepareStatement(sql);
 			st.setInt(1, id);
 			rs = st.executeQuery();
@@ -150,15 +140,14 @@ public class SellerDaoJDBC implements SellerDao {
 
 	@Override
 	public List<Seller> findAll() {
-		String sql = "SELECT * FROM seller";
 		List<Seller> list = new ArrayList<Seller>();
-		Connection conn = null;
-		PreparedStatement st = null;
-		ResultSet rs = null;
+
+		String sql = "SELECT * FROM seller";
 
 		try {
 			conn = Db.getConnection();
 			st = conn.prepareStatement(sql);
+
 			rs = st.executeQuery();
 
 			while (rs.next()) {
@@ -168,8 +157,9 @@ public class SellerDaoJDBC implements SellerDao {
 
 			if (list.isEmpty()) {
 				System.out.println();
-				System.out.println("Não existem funcionarios ativos");
+				LoggerUtility.warn("Não existem funcionarios ativos");
 			}
+
 			return list;
 
 		} catch (SQLException e) {

@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-
 import db.Db;
 import db.DbException;
 import model.dao.DepartmentDao;
@@ -16,15 +15,18 @@ import utilities.LoggerUtility;
 
 public class DepartmentDaoJDBC implements DepartmentDao {
 
+	private static Connection conn = null;
+	private static Statement stmt = null;
+	private static PreparedStatement st = null;
+	private static ResultSet rs = null;
+
 	@Override
 	public void createTable() {
 		String createDepartmentTable = "CREATE TABLE IF NOT EXISTS department (" + "id INT PRIMARY KEY AUTO_INCREMENT,"
 				+ "name_department VARCHAR(255) NOT NULL)";
 
-		Connection conn = null;
-		Statement stmt = null;
-
 		try {
+
 			conn = Db.getConnection();
 			stmt = conn.createStatement();
 			stmt.executeUpdate(createDepartmentTable);
@@ -42,14 +44,11 @@ public class DepartmentDaoJDBC implements DepartmentDao {
 	@Override
 	public void insert(Department obj) {
 
-		PreparedStatement st = null;
-		Connection conn = null;
-
+		String sql = "INSERT INTO department (name_department) VALUES (?)";
 		try {
-			conn = Db.getConnection();
-			String sql = "INSERT INTO department (name_department) VALUES (?)";
-			st = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
+			conn = Db.getConnection();
+			st = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 			st.setString(1, obj.getNameDepartment());
 
 			int rowsAffected = st.executeUpdate();
@@ -64,7 +63,7 @@ public class DepartmentDaoJDBC implements DepartmentDao {
 				}
 
 				else {
-					throw new DbException("Erro na inserção de um novo departamento");
+					LoggerUtility.warn("Não foi possivel inserir um novo departamento!!");
 				}
 			}
 
@@ -82,19 +81,29 @@ public class DepartmentDaoJDBC implements DepartmentDao {
 
 	@Override
 	public void deleteById(Integer id) {
-		PreparedStatement st = null;
-		Connection conn = null;
 		String sql = "DELETE FROM department WHERE id = ?";
 		String sqlCheck = "SELECT COUNT(*) AS count FROM seller WHERE department_id = ?";
+
 		try {
+
 			conn = Db.getConnection();
+			st = conn.prepareStatement(sqlCheck);
+			st.setInt(1, id);
+			rs = st.executeQuery();
+
+			if (rs.next() && rs.getInt("count") > 0) {
+				LoggerUtility.warn("Existem vendedores vinculados a esse departamento! ");
+				return;
+
+			}
+
 			st = conn.prepareStatement(sql);
 			st.setInt(1, id);
 
 			int rowsAffected = st.executeUpdate();
 
 			if (rowsAffected == 0) {
-				System.out.println("Departamento não encontrado");
+				LoggerUtility.warn("Departamento para deleção não encontrado");
 				return;
 
 			} else {
@@ -112,12 +121,7 @@ public class DepartmentDaoJDBC implements DepartmentDao {
 	@Override
 	public Department findById(Integer id) {
 		String sql = "SELECT * FROM department WHERE id = ?";
-		PreparedStatement st = null;
-		ResultSet rs = null;
-		Connection conn = null;
-
 		try {
-
 			conn = Db.getConnection();
 			st = conn.prepareStatement(sql);
 			st.setInt(1, id);
@@ -129,10 +133,11 @@ public class DepartmentDaoJDBC implements DepartmentDao {
 
 			}
 
+			LoggerUtility.warn("Departamento não encontrado\nID: " + id);
 			return null;
 
 		} catch (SQLException e) {
-			LoggerUtility.error("Erro no metodo findById (Classe: DepartmentDaoJDBC)\nMotivo: ", e.getMessage());
+			LoggerUtility.error("Erro no metodo findById (Classe: DepartmentDaoJDBC)");
 			throw new DbException("Erro ao buscar o departamento por ID: " + e.getMessage());
 		}
 
@@ -142,9 +147,7 @@ public class DepartmentDaoJDBC implements DepartmentDao {
 	public List<Department> findAll() {
 		String sql = "SELECT * FROM department";
 		List<Department> list = new ArrayList<Department>();
-		Connection conn = null;
-		PreparedStatement st = null;
-		ResultSet rs = null;
+
 		try {
 			conn = Db.getConnection();
 			st = conn.prepareStatement(sql);
@@ -158,11 +161,12 @@ public class DepartmentDaoJDBC implements DepartmentDao {
 
 			if (list.isEmpty()) {
 				System.out.println();
-				System.out.println("Não existem departamentos ativos");
+				LoggerUtility.warn("Não existem departamentos ativos");
 			}
 
 			return list;
 		} catch (SQLException e) {
+			LoggerUtility.error("Erro no metodo findAll (Classe: DepartmentJDBC)");
 			throw new DbException("Erro ao buscar todos os departamentos\nCausa: ", e.getCause());
 		}
 
