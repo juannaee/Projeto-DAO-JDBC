@@ -93,7 +93,7 @@ public class DepartmentDaoJDBC implements DepartmentDao {
 			}
 
 		} catch (SQLException e) {
-			LoggerUtility.error("erro no metodo update, classe: DepartmentDaoJDBC\nCausa: ", e.getCause());
+			LoggerUtility.error("Erro no metodo update, classe: DepartmentDaoJDBC\nCausa: ", e.getCause());
 			throw new DbException(e.getMessage());
 		}
 

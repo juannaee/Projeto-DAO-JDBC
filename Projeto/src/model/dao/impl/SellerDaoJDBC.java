@@ -85,7 +85,32 @@ public class SellerDaoJDBC implements SellerDao {
 
 	@Override
 	public void update(Seller obj) {
-		// TODO Auto-generated method stub
+
+		String sql = "UPDATE seller set name_seller = ?, birth_date = ?, base_salary = ?, department_id = ?, work_level_id = ? WHERE id = ? ";
+
+		try {
+			conn = Db.getConnection();
+			st = conn.prepareStatement(sql);
+			st.setString(1, obj.getNameSeller());
+			st.setString(2, obj.getNameSeller());
+			st.setDouble(3, obj.getBaseSalary());
+			st.setDate(4, new java.sql.Date(obj.getBirthDate().getTime()));
+			st.setInt(6, obj.getDepartment().getId());
+			st.setInt(7, obj.getWorkLevel().getId());
+
+			int rowsAffected = st.executeUpdate();
+
+			if (rowsAffected > 0) {
+				LoggerUtility.info("Vendedor atualizado com sucesso");
+			} else {
+				LoggerUtility.warn("Vendedor não encontrado para atualização. ID:", obj.getId());
+			}
+
+		} catch (SQLException e) {
+			LoggerUtility.error("Erro no metodo update, classe: SellerDaoJDBC\nCausa: ", e.getCause());
+			throw new DbException(e.getMessage());
+
+		}
 
 	}
 
