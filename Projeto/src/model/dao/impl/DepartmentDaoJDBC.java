@@ -76,6 +76,26 @@ public class DepartmentDaoJDBC implements DepartmentDao {
 
 	@Override
 	public void update(Department obj) {
+		String sql = "UPDATE department SET name_department = ? WHERE id = ?";
+
+		try {
+			conn = Db.getConnection();
+			st = conn.prepareStatement(sql);
+			st.setString(1, obj.getNameDepartment());
+			st.setInt(2, obj.getId());
+
+			int rowsAffected = st.executeUpdate();
+
+			if (rowsAffected > 0) {
+				LoggerUtility.info("Departamento atualizado com sucesso");
+			} else {
+				LoggerUtility.warn("Departamento não encontrado para atualização. ID: ", obj.getId());
+			}
+
+		} catch (SQLException e) {
+			LoggerUtility.error("erro no metodo update, classe: DepartmentDaoJDBC\nCausa: ", e.getCause());
+			throw new DbException(e.getMessage());
+		}
 
 	}
 

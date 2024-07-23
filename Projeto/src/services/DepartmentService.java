@@ -7,7 +7,7 @@ import model.dao.DepartmentDao;
 import model.entities.Department;
 
 public class DepartmentService {
-	private static DepartmentDao department = DaoFactory.createDepartmentDaoJDBC();
+	private static DepartmentDao departmentDao = DaoFactory.createDepartmentDaoJDBC();
 
 	private static Department departmentObj;
 
@@ -15,7 +15,7 @@ public class DepartmentService {
 		int option;
 		do {
 			System.out.println(
-					"Escolha uma das opções\n1 - Mostrar Departamentos\n2 - Inserir Departamentos\n3 - Procurar por ID\n4 - Deletar Departamento\n9 - Sair");
+					"Escolha uma das opções\n1 - Mostrar Departamentos\n2 - Inserir Departamentos\n3 - Procurar por ID\n4 - Deletar Departamento\n5 - Atualizar dados \n9 - Sair");
 			option = sc.nextInt();
 			System.out.println();
 
@@ -35,6 +35,9 @@ public class DepartmentService {
 				deleteById(sc);
 				System.out.println();
 
+			} else if (option == 5) {
+				updateDepartment(sc);
+				System.out.println();
 			}
 
 			else if (option == 9) {
@@ -55,7 +58,7 @@ public class DepartmentService {
 
 	private static void showDepartments() {
 		System.out.println("DEPARTAMENTOS: ");
-		System.out.println(department.findAll());
+		System.out.println(departmentDao.findAll());
 	}
 
 	private static Department departmentInsert(Scanner sc) {
@@ -64,7 +67,7 @@ public class DepartmentService {
 		sc.nextLine();
 		String nameDepartment = sc.nextLine();
 		departmentObj = new Department(nameDepartment);
-		department.insert(departmentObj);
+		departmentDao.insert(departmentObj);
 
 		return departmentObj;
 	}
@@ -73,7 +76,7 @@ public class DepartmentService {
 
 		System.out.println("Digite um numero ID");
 		int id = sc.nextInt();
-		Department objId = department.findById(id);
+		Department objId = departmentDao.findById(id);
 		if (objId != null) {
 			System.out.println("Departamento encontrado:");
 			System.out.println(objId);
@@ -87,7 +90,7 @@ public class DepartmentService {
 
 	private static void deleteById(Scanner sc) {
 
-		if (department.findAll().isEmpty()) {
+		if (departmentDao.findAll().isEmpty()) {
 			return;
 		}
 
@@ -95,8 +98,29 @@ public class DepartmentService {
 		System.out.println("Digite um id para excluir um departamento: ");
 		int id = sc.nextInt();
 		System.out.println();
-		department.deleteById(id);
+		departmentDao.deleteById(id);
 		System.out.println();
+
+	}
+
+	private static void updateDepartment(Scanner sc) {
+		System.out.println();
+
+		System.out.println("Departamentos ativos: ");
+		showDepartments();
+		System.out.println();
+
+		System.out.println("Escolha um id para atualização");
+		int id = sc.nextInt();
+		sc.nextLine();
+		System.out.println();
+		Department department = departmentDao.findById(id);
+		if (department != null) {
+			System.out.println("Digite um nome novo para o departamento para atualização");
+			String nameDepartment = sc.nextLine();
+			department.setNameDepartment(nameDepartment);
+			departmentDao.update(department);
+		}
 
 	}
 

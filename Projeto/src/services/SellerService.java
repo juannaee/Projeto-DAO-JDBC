@@ -9,7 +9,7 @@ import model.dao.SellerDao;
 import model.entities.Department;
 import model.entities.Seller;
 import model.entities.WorkLevel;
-
+import utilities.LoggerUtility;
 
 public class SellerService {
 
@@ -80,7 +80,7 @@ public class SellerService {
 				sc.nextLine();
 
 				if (departmentDao.findById(departmentChoice) == null) {
-					System.out.println(
+					LoggerUtility.warn(
 							"Departamento inexistente, assim possivel realocar o funcionario para um departamento existente");
 					department = null;
 				}
