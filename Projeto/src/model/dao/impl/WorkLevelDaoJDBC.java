@@ -76,7 +76,7 @@ public class WorkLevelDaoJDBC implements model.dao.WorkLevelDao {
 	}
 
 	@Override
-	public String findAll() {
+	public List<WorkLevel> findAll() {
 		List<WorkLevel> list = new ArrayList<WorkLevel>();
 
 		for (WorkLevel level : WorkLevel.values()) {
@@ -84,7 +84,7 @@ public class WorkLevelDaoJDBC implements model.dao.WorkLevelDao {
 
 		}
 
-		return list.toString();
+		return list;
 	}
 
 }

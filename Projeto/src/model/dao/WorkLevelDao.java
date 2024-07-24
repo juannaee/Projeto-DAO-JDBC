@@ -1,18 +1,32 @@
-/**
- * 
- */
 package model.dao;
 
-import java.sql.SQLException;
+import java.util.List;
 
+import model.entities.WorkLevel;
 
+/**
+ * Interface que define as operações de acesso a dados para a entidade
+ * WorkLevel.
+ */
 public interface WorkLevelDao {
 
-	void createTable() throws SQLException;
+	/**
+	 * Cria a tabela de WorkLevel no banco de dados.
+	 * 
+	 */
+	void createTable();
 
-	void insertInititalWorkLevels() throws SQLException;
-	
-	
-	String findAll() throws SQLException;
+	/**
+	 * Insere os níveis de trabalho iniciais na tabela de WorkLevel.
+	 * 
+	 */
+	void insertInititalWorkLevels();
+
+	/**
+	 * Encontra todos os níveis de trabalho.
+	 * 
+	 * @return uma lista com todos os níveis de trabalho
+	 */
+	List<WorkLevel> findAll();
 
 }

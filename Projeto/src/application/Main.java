@@ -3,6 +3,7 @@ package application;
 import java.util.Scanner;
 
 import db.DataBaseInitializer;
+import db.Db;
 import services.DepartmentService;
 import services.SellerService;
 import services.WorkLevelService;
@@ -10,7 +11,7 @@ import services.WorkLevelService;
 public class Main {
 
 	public static void main(String[] args) {
-
+		Db.getConnection();
 		try (Scanner sc = new Scanner(System.in);)
 
 		{
@@ -57,7 +58,9 @@ public class Main {
 		}
 
 		catch (Exception e) {
-			throw new RuntimeException(e.getMessage());
+			throw new RuntimeException(e);
+		} finally {
+			Db.closeConnection();
 		}
 	}
 

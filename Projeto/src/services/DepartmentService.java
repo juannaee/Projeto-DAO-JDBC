@@ -38,15 +38,11 @@ public class DepartmentService {
 			} else if (option == 5) {
 				updateDepartment(sc);
 				System.out.println();
-			}
-
-			else if (option == 9) {
+			} else if (option == 9) {
 				System.out.println("Saindo...");
 				System.out.println();
 
-			}
-
-			else {
+			} else {
 				System.out.println("Opção invalida");
 				System.out.println();
 
@@ -57,8 +53,9 @@ public class DepartmentService {
 	}
 
 	private static void showDepartments() {
-		System.out.println("DEPARTAMENTOS: ");
+		System.out.println("DEPARTAMENTOS ATIVOS: ");
 		System.out.println(departmentDao.findAll());
+
 	}
 
 	private static Department departmentInsert(Scanner sc) {
@@ -105,8 +102,6 @@ public class DepartmentService {
 
 	private static void updateDepartment(Scanner sc) {
 		System.out.println();
-
-		System.out.println("Departamentos ativos: ");
 		showDepartments();
 		System.out.println();
 

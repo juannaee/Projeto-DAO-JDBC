@@ -13,14 +13,14 @@ import utilities.LoggerUtility;
 
 public class SellerService {
 
-	private static SellerDao sellerDao = DaoFactory.createSellerDao();
+	private static SellerDao sellerDao = DaoFactory.createSellerDaoJDBC();
 
 	public static void mainSeller(Scanner sc) {
 		int option;
 
 		do {
 			System.out.println(
-					"Escolha uma das opções\n1 - Mostrar Funcionarios\n2 - Inserir Funcionarios\n3 - Procurar por ID\n4 - Deletar por ID\n9 - Sair");
+					"Escolha uma das opções\n1 - Mostrar Funcionarios\n2 - Inserir Funcionarios\n3 - Procurar por ID\n4 - Deletar Por ID\n5 - Atualizar Funcionario\n9 - Sair");
 			option = sc.nextInt();
 			sc.nextLine();
 
@@ -39,6 +39,9 @@ public class SellerService {
 				deleteById(sc);
 				System.out.println();
 
+			} else if (option == 5) {
+				updateSeller(sc);
+				System.out.println();
 			} else if (option == 9) {
 				System.out.println("Saindo...");
 				System.out.println();
@@ -157,7 +160,7 @@ public class SellerService {
 	}
 
 	private static void showSeller() {
-		System.out.println("FUNCIONARIOS: ");
+		System.out.println("FUNCIONARIOS ATIVOS: ");
 		System.out.println(sellerDao.findAll());
 	}
 
@@ -172,6 +175,24 @@ public class SellerService {
 		System.out.println();
 		sellerDao.deleteById(id);
 		System.out.println();
+
+	}
+
+	private static void updateSeller(Scanner sc) {
+		showSeller();
+		System.out.println("Escolha um id para atualizar ");
+		int id = sc.nextInt();
+		sc.nextLine();
+		Seller seller = sellerDao.findById(id);
+		System.out.println();
+		SellerUpdateService.updateSellerDetails(sc, seller);
+		try {
+			sellerDao.update(seller);
+			System.out.println();
+
+		} catch (Exception e) {
+			LoggerUtility.error("Erro ao salvar atualizações ", e.getMessage());
+		}
 
 	}
 

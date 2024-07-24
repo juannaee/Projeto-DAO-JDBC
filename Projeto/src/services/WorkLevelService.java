@@ -1,9 +1,5 @@
 package services;
-
-import java.sql.SQLException;
 import java.util.Scanner;
-
-import db.DbException;
 import model.dao.DaoFactory;
 import model.dao.WorkLevelDao;
 import utilities.LoggerUtility;
@@ -36,14 +32,12 @@ public class WorkLevelService {
 
 	private static void showWorkLevels() {
 		System.out.println("Niveis de trabalho:");
-		try {
+		if (!workLevel.findAll().isEmpty()) {
 			System.out.println(workLevel.findAll());
 			System.out.println();
-		} catch (SQLException e) {
-			LoggerUtility.error("Erro ao mostrar niveis de trabalho\nCausa:\n", e.getCause());
-			throw new DbException(e.getMessage());
+		} else {
+			LoggerUtility.error("Erro ao mostrar niveis de trabalho");
 
 		}
 	}
-
 }

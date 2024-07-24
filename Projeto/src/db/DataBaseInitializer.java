@@ -14,7 +14,7 @@ public class DataBaseInitializer {
 
 	private static WorkLevelDao workLevel = DaoFactory.createWorkLevelDaoJDBC();
 	private static DepartmentDao department = DaoFactory.createDepartmentDaoJDBC();
-	private static SellerDao seller = DaoFactory.createSellerDao();
+	private static SellerDao seller = DaoFactory.createSellerDaoJDBC();
 
 	public static void dataBaseSetup() {
 		Connection conn = null;

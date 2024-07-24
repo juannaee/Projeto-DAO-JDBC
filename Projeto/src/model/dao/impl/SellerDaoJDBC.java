@@ -86,24 +86,24 @@ public class SellerDaoJDBC implements SellerDao {
 	@Override
 	public void update(Seller obj) {
 
-		String sql = "UPDATE seller set name_seller = ?, birth_date = ?, base_salary = ?, department_id = ?, work_level_id = ? WHERE id = ? ";
+		String sql = "UPDATE seller SET name_seller = ?, birth_date = ?, base_salary = ?, department_id = ?, work_level_id = ? WHERE id = ? ";
 
 		try {
 			conn = Db.getConnection();
 			st = conn.prepareStatement(sql);
 			st.setString(1, obj.getNameSeller());
-			st.setString(2, obj.getNameSeller());
+			st.setDate(2, new java.sql.Date(obj.getBirthDate().getTime()));
 			st.setDouble(3, obj.getBaseSalary());
-			st.setDate(4, new java.sql.Date(obj.getBirthDate().getTime()));
-			st.setInt(6, obj.getDepartment().getId());
-			st.setInt(7, obj.getWorkLevel().getId());
+			st.setInt(4, obj.getDepartment().getId());
+			st.setInt(5, obj.getWorkLevel().getId());
+			st.setInt(6, obj.getId());
 
 			int rowsAffected = st.executeUpdate();
 
 			if (rowsAffected > 0) {
-				LoggerUtility.info("Vendedor atualizado com sucesso");
+				LoggerUtility.info("Funcionario atualizado com sucesso");
 			} else {
-				LoggerUtility.warn("Vendedor não encontrado para atualização. ID:", obj.getId());
+				LoggerUtility.warn("Funcionario não encontrado para atualização. ID:", obj.getId());
 			}
 
 		} catch (SQLException e) {
