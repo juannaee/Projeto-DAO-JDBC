@@ -1,4 +1,4 @@
-package services;
+package services.seller;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -7,6 +7,7 @@ import java.util.Scanner;
 
 import model.dao.DaoFactory;
 import model.dao.DepartmentDao;
+import model.dao.SellerDao;
 import model.entities.Department;
 import model.entities.Seller;
 import model.entities.WorkLevel;
@@ -21,6 +22,47 @@ public class SellerInsertService {
 			Date bithDate = insertSellerBirthDate(sc);
 			Double baseSalary = insertSellerBaseSalary(sc);
 			Department department = insertSellerDepartment(sc);
+			WorkLevel workLevel = insertSellerWorkLevel(sc);
+			Seller seller = new Seller(nameSeller, bithDate, baseSalary, department, workLevel);
+
+			System.out.println("O funcionario: " + seller + "\n Está correto? (1 - Sim / Outro - Não");
+			int choice = 0;
+			try {
+				choice = Integer.parseInt(sc.nextLine());
+
+				if (choice != 1) {
+					System.out.println("Ok, tente novamente.");
+					continue;
+				}
+
+				System.out.println("Deseja inserir mais um funcionario? (1 - Sim / Outro - Não");
+				int choice_continue = 0;
+				try {
+					choice_continue = Integer.parseInt(sc.nextLine());
+					if (choice_continue == 1) {
+						System.out.println("Ok.");
+						continue;
+					}
+
+					if (choice_continue != 1) {
+						System.out.println("Funcionario validado.");
+						SellerDao sellerDao = DaoFactory.createSellerDaoJDBC();
+						sellerDao.insert(seller);
+						continueInserting = false;
+
+					}
+
+				} catch (NumberFormatException e) {
+					LoggerUtility.error("Opção: ", choice_continue, " inválida tente novamente.");
+					continue;
+
+				}
+
+			} catch (NumberFormatException e) {
+				LoggerUtility.error("Opção: ", choice, " inválida tente novamente.");
+				continue;
+
+			}
 
 		}
 
@@ -43,10 +85,12 @@ public class SellerInsertService {
 				choice = Integer.parseInt(sc.nextLine());
 
 				if (choice != 1) {
-					System.out.println("Ok, tente novamente");
+					System.out.println("Ok, tente novamente.");
 					continue;
 				}
 			} catch (NumberFormatException e) {
+				LoggerUtility.error("Opção: ", choice, " inválida tente novamente.");
+				continue;
 
 			}
 
@@ -54,7 +98,7 @@ public class SellerInsertService {
 				LoggerUtility.info("Nome de funcionario validado: ", nameSeller);
 				confirm = true;
 			} else {
-				System.out.println("Ok, tente novamente!");
+				System.out.println("Ok, tente novamente.");
 				continue;
 			}
 		}
@@ -78,7 +122,7 @@ public class SellerInsertService {
 
 				choice = Integer.parseInt(sc.nextLine());
 				if (choice != 1) {
-					System.out.println("Ok, tente novamente");
+					System.out.println("Ok, tente novamente.");
 					continue;
 				}
 
@@ -96,7 +140,7 @@ public class SellerInsertService {
 				confirm = true;
 
 			} else {
-				System.out.println("Ok, tente novamente");
+				System.out.println("Ok, tente novamente.");
 			}
 		}
 
@@ -120,7 +164,7 @@ public class SellerInsertService {
 
 					choice = Integer.parseInt(sc.nextLine());
 					if (choice != 1) {
-						System.out.println("Ok, tente novamente");
+						System.out.println("Ok, tente novamente.");
 						continue;
 					}
 				} catch (NumberFormatException e) {
@@ -141,7 +185,7 @@ public class SellerInsertService {
 				confirm = true;
 
 			} else {
-				System.out.println("Ok, tente novamente");
+				System.out.println("Ok, tente novamente.");
 			}
 		}
 		return baseSalary;
@@ -165,7 +209,7 @@ public class SellerInsertService {
 					continue;
 				}
 
-				System.out.println("o departamento: " + department + ". Está correto? (1 - Sim / Outro - Não");
+				System.out.println("o departamento: " + department + "Está correto? (1 - Sim / Outro - Não");
 				try {
 
 					choice = Integer.parseInt(sc.nextLine());
@@ -188,7 +232,7 @@ public class SellerInsertService {
 				LoggerUtility.info("Departamento validado: ", department);
 				confirm = true;
 			} else {
-				System.out.println("Ok, tente novamente");
+				System.out.println("Ok, tente novamente.");
 			}
 
 		}
@@ -196,25 +240,61 @@ public class SellerInsertService {
 		return department;
 	}
 
-	private static void updateSellerWorkLevel(Scanner sc, Seller seller) {
-		System.out.println("Escolha o novo nivel de trabalho:\n1 - Junior\n2 - Pleno\n3 - Senior");
-		int workLevelChoice = sc.nextInt();
-		sc.nextLine();
+	private static WorkLevel insertSellerWorkLevel(Scanner sc) {
+		boolean confirm = false;
+		int choice = 0;
+		int workLevelChoice = 0;
+		WorkLevel workLevel = null;
 
-		switch (workLevelChoice) {
-		case 1:
-			seller.setWorkLevel(WorkLevel.JUNIOR);
-			break;
-		case 2:
-			seller.setWorkLevel(WorkLevel.PLENO);
-			break;
-		case 3:
-			seller.setWorkLevel(WorkLevel.SENIOR);
-			break;
-		default:
-			LoggerUtility.warn("Opção inválida para nível de trabalho: ", workLevelChoice);
+		while (!confirm) {
+			System.out.println("Escolha o novo nivel de trabalho:\n1 - Junior\n2 - Pleno\n3 - Senior");
+			try {
+				workLevelChoice = Integer.parseInt(sc.nextLine());
+				switch (workLevelChoice) {
+				case 1:
+					workLevel = WorkLevel.JUNIOR;
+					break;
+				case 2:
+					workLevel = WorkLevel.PLENO;
+					break;
+				case 3:
+					workLevel = WorkLevel.SENIOR;
+					break;
+				default:
+					LoggerUtility.warn("Opção inválida para nível de trabalho: ", workLevelChoice, ". Tente novamente");
+					continue;
+				}
+
+				System.out.println("O nivel de trabalho : " + workLevel + "Está correto? (1 - Sim / Outro - Não");
+				try {
+
+					choice = Integer.parseInt(sc.nextLine());
+					if (choice != 1) {
+						System.out.println("Ok, tente novamente");
+						continue;
+					}
+				} catch (NumberFormatException e) {
+					LoggerUtility.error("Entrada:", choice, " invalida, por gentileza insira um valor numerico");
+					continue;
+
+				}
+
+			} catch (NumberFormatException e) {
+				LoggerUtility.error("Entrada:", workLevelChoice, " invalida, por gentileza insira um valor numerico");
+				continue;
+
+			}
+
+			if (choice == 1) {
+				LoggerUtility.info("Nivel de trabalho validado: ", workLevel);
+				confirm = true;
+			} else {
+				System.out.println("Ok, tente novamente.");
+			}
+
 		}
 
+		return workLevel;
 	}
 
 }

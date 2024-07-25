@@ -1,30 +1,22 @@
 package application;
 
 import java.util.Scanner;
-
 import db.DataBaseInitializer;
 import db.Db;
 import services.DepartmentService;
-import services.SellerInsertService;
-import services.SellerService;
 import services.WorkLevelService;
+import services.seller.SellerService;
 
 public class Main {
 
 	public static void main(String[] args) {
 		Db.getConnection();
 
-		Scanner teste = new Scanner(System.in);
-
-		System.out.println("Teste");
-		SellerInsertService.insertSellerDetails(teste);
-
 		try (Scanner sc = new Scanner(System.in);)
 
 		{
 
 			DataBaseInitializer.dataBaseSetup();
-
 			int option;
 
 			do {

@@ -1,6 +1,5 @@
-/services/
-/model/
 /application/
 /db/
+/model/
+/services/
 /utilities/
-/sellerServices/
