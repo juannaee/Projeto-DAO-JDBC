@@ -8,7 +8,7 @@ import model.dao.impl.WorkLevelDaoJDBC;
 public class DaoFactory {
 
 	public static SellerDao createSellerDaoJDBC() {
-		return new SellerDaoJDBC();
+		return new SellerDaoJDBC(Db.getConnection());
 
 	}
 

@@ -20,10 +20,14 @@ import utilities.LoggerUtility;
 
 public class SellerDaoJDBC implements SellerDao {
 
-	private static Connection conn = null;
+	private Connection conn;
 	private static Statement stmt = null;
 	private static ResultSet rs = null;
 	private static PreparedStatement st = null;
+
+	public SellerDaoJDBC(Connection conn) {
+		this.conn = conn;
+	}
 
 	@Override
 	public void createTable() {

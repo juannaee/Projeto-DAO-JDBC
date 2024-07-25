@@ -70,7 +70,7 @@ class SellerUpdateService {
 				break;
 
 			default:
-				LoggerUtility.error("Opção invalida!\nOopção digitada: ", option);
+				LoggerUtility.error("Opção invalida!\nOpção digitada: ", option);
 				continue;
 			}
 		}

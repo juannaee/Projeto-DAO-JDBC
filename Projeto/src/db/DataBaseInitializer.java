@@ -18,9 +18,11 @@ public class DataBaseInitializer {
 
 	public static void dataBaseSetup() {
 		Connection conn = null;
+		long startTime = System.currentTimeMillis();
 
 		try {
 
+			LoggerUtility.info("Carregando configurações de banco de dados.....");
 			conn = Db.getConnection();
 			conn.setAutoCommit(false);
 
@@ -51,8 +53,10 @@ public class DataBaseInitializer {
 			throw new RuntimeException("\nDetalhes: ", e);
 
 		} finally {
-			LoggerUtility.info(
-					"Método DataBaseInitializer executado com sucesso. Fechando conexão SQL para novos serviços...");
+			long endTime = System.currentTimeMillis();
+			long duration = endTime - startTime;
+			LoggerUtility.info("Classe DataBaseInitializer executada com sucesso.\nTempo estimado: " + duration
+					+ " ms.\nFechando conexão SQL para novos serviços...");
 
 			Db.closeConnection();
 		}
