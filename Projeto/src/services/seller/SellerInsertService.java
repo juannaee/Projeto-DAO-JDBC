@@ -121,7 +121,10 @@ public class SellerInsertService {
 				System.out.println("A data de nascimento: " + birthDate + ". Está correta? (1 - Sim / Outro - Não");
 
 				choice = Integer.parseInt(sc.nextLine());
-				if (choice != 1) {
+				if (choice == 1) {
+					LoggerUtility.info("Data de aniversario de funcionario validada: ", birthDate);
+					confirm = true;
+				} else {
 					System.out.println("Ok, tente novamente.");
 					continue;
 				}
@@ -135,13 +138,6 @@ public class SellerInsertService {
 				continue;
 			}
 
-			if (choice == 1) {
-				LoggerUtility.info("Data de aniversario de funcionario validada: ", birthDate);
-				confirm = true;
-
-			} else {
-				System.out.println("Ok, tente novamente.");
-			}
 		}
 
 		return birthDate;

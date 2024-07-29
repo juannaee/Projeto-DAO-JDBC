@@ -78,24 +78,64 @@ class SellerUpdateService {
 	}
 
 	private static void updateSellerName(Scanner sc, Seller seller) {
-		System.out.println("Digite o novo nome: ");
-		String newName = sc.nextLine();
-		if (!newName.trim().isEmpty()) {
-			seller.setNameSeller(newName);
-		} else {
-			LoggerUtility.warn("Nome invalidado: ", newName);
+		boolean confirm = false;
+		int choice = 0;
+		String newName = null;
+		while (!confirm) {
+			System.out.println("Digite o novo nome: ");
+			newName = sc.nextLine();
+			System.out.println("O nome: " + newName + ". Está correto? (1 - Sim / Outro - Não");
+			try {
+				choice = Integer.parseInt(sc.nextLine());
+
+				if (!newName.trim().isEmpty() && choice == 1) {
+					LoggerUtility.info("Nome de funcionario validado: ", newName);
+					seller.setNameSeller(newName);
+					confirm = true;
+				} else {
+					LoggerUtility.warn("Nome invalidado: ", newName, ". Tente novamente");
+					continue;
+				}
+			} catch (NumberFormatException e) {
+				LoggerUtility.error("Opção: ", choice, " inválida tente novamente.");
+				continue;
+			}
 		}
 	}
 
 	private static void updateSellerBirthDate(Scanner sc, Seller seller) {
-		System.out.println("Digite a nova data de nascimento (yyyy-MM-dd): ");
-		String dateInput = sc.nextLine();
-		try {
-			java.util.Date birthDate = new SimpleDateFormat("yyyy-MM-dd").parse(dateInput);
-			seller.setBirthDate(birthDate);
+		boolean confirm = false;
+		int choice = 0;
+		String dateInput = null;
+		java.util.Date birthDate = null;
 
-		} catch (ParseException e) {
-			LoggerUtility.error("Formato de data invalida\nCausa: ", e.getCause());
+		while (!confirm) {
+
+			System.out.println("Digite a nova data de nascimento (yyyy-MM-dd): ");
+			dateInput = sc.nextLine();
+			try {
+
+				birthDate = new SimpleDateFormat("yyyy-MM-dd").parse(dateInput);
+				System.out.println("A data de nascimento: " + birthDate + ". Está correta? (1 - Sim / Outro - Não");
+				choice = Integer.parseInt(sc.nextLine());
+				if (choice == 1) {
+					LoggerUtility.info("Data de aniversario de funcionario validada: ", birthDate);
+					seller.setBirthDate(birthDate);
+					confirm = true;
+				} else {
+					System.out.println("Ok, tente novamente.");
+					continue;
+				}
+
+			} catch (NumberFormatException e) {
+				LoggerUtility.error("Opção: ", choice, " inválida tente novamente.");
+				continue;
+
+			} catch (ParseException e) {
+				LoggerUtility.error("Formato de data invalida: ", birthDate, "\nTente novamente.");
+				continue;
+			}
+
 		}
 
 	}
