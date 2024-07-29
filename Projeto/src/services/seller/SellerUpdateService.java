@@ -207,24 +207,53 @@ class SellerUpdateService {
 	}
 
 	private static void updateSellerWorkLevel(Scanner sc, Seller seller) {
-		System.out.println("Escolha o novo nivel de trabalho:\n1 - Junior\n2 - Pleno\n3 - Senior");
-		int workLevelChoice = sc.nextInt();
-		sc.nextLine();
+		boolean confirm = false;
+		int choice = 0;
+		int workLevelChoice = 0;
+		WorkLevel workLevel = null;
 
-		switch (workLevelChoice) {
-		case 1:
-			seller.setWorkLevel(WorkLevel.JUNIOR);
-			break;
-		case 2:
-			seller.setWorkLevel(WorkLevel.PLENO);
-			break;
-		case 3:
-			seller.setWorkLevel(WorkLevel.SENIOR);
-			break;
-		default:
-			LoggerUtility.warn("Opção inválida para nível de trabalho: " + workLevelChoice);
+		while (!confirm) {
+
+			System.out.println("Escolha o novo nivel de trabalho:\n1 - Junior\n2 - Pleno\n3 - Senior");
+			try {
+				workLevelChoice = Integer.parseInt(sc.nextLine());
+
+				switch (workLevelChoice) {
+				case 1:
+					workLevel = WorkLevel.JUNIOR;
+					break;
+				case 2:
+					workLevel = WorkLevel.PLENO;
+					break;
+				case 3:
+					workLevel = WorkLevel.SENIOR;
+					break;
+				default:
+					LoggerUtility.warn("Opção inválida para nível de trabalho: ", workLevelChoice, ". Tente novamente");
+					continue;
+				}
+
+				System.out.println("O nivel de trabalho : " + workLevel + "Está correto? (1 - Sim / Outro - Não");
+				try {
+					choice = Integer.parseInt(sc.nextLine());
+
+					if (choice == 1) {
+						LoggerUtility.info("Nivel de trabalho validado: ", workLevel);
+						seller.setWorkLevel(workLevel);
+						confirm = true;
+					}
+
+				} catch (NumberFormatException e) {
+					LoggerUtility.error("Entrada:", choice, " invalida, por gentileza insira um valor numerico");
+					continue;
+
+				}
+
+			} catch (NumberFormatException e) {
+				LoggerUtility.error("Entrada:", workLevelChoice, " invalida, por gentileza insira um valor numerico");
+				continue;
+			}
 		}
-
 	}
 
 }

@@ -145,7 +145,6 @@ public class SellerInsertService {
 	}
 
 	private static Double insertSellerBaseSalary(Scanner sc) {
-
 		boolean confirm = false;
 		int choice = 0;
 		Double baseSalary = 0.0;
@@ -159,29 +158,22 @@ public class SellerInsertService {
 				try {
 
 					choice = Integer.parseInt(sc.nextLine());
-					if (choice != 1) {
+					if (choice == 1) {
+						LoggerUtility.info("Salário base validado: ", baseSalary);
+						confirm = true;
+
+					} else {
 						System.out.println("Ok, tente novamente.");
 						continue;
 					}
 				} catch (NumberFormatException e) {
 					LoggerUtility.error("Entrada:", choice, " invalida, por gentileza insira um valor numerico");
 					continue;
-
 				}
-
 			} catch (NumberFormatException e) {
 				LoggerUtility.error("Entrada:", baseSalary,
 						" invalida para salário base, por gentileza insira um valor numerico");
 				continue;
-
-			}
-
-			if (choice == 1) {
-				LoggerUtility.info("Salário base validado: ", baseSalary);
-				confirm = true;
-
-			} else {
-				System.out.println("Ok, tente novamente.");
 			}
 		}
 		return baseSalary;
@@ -209,7 +201,11 @@ public class SellerInsertService {
 				try {
 
 					choice = Integer.parseInt(sc.nextLine());
-					if (choice != 1) {
+					if (choice == 1) {
+						LoggerUtility.info("Departamento validado: ", department);
+						confirm = true;
+
+					} else {
 						System.out.println("Ok, tente novamente");
 						continue;
 					}
@@ -222,13 +218,6 @@ public class SellerInsertService {
 			} catch (NumberFormatException e) {
 				LoggerUtility.error("Entrada:", departmentId, " invalida, por gentileza insira um valor numerico");
 				continue;
-			}
-
-			if (choice == 1) {
-				LoggerUtility.info("Departamento validado: ", department);
-				confirm = true;
-			} else {
-				System.out.println("Ok, tente novamente.");
 			}
 
 		}
@@ -265,7 +254,10 @@ public class SellerInsertService {
 				try {
 
 					choice = Integer.parseInt(sc.nextLine());
-					if (choice != 1) {
+					if (choice == 1) {
+						LoggerUtility.info("Nivel de trabalho validado: ", workLevel);
+						confirm = true;
+					} else {
 						System.out.println("Ok, tente novamente");
 						continue;
 					}
@@ -279,13 +271,6 @@ public class SellerInsertService {
 				LoggerUtility.error("Entrada:", workLevelChoice, " invalida, por gentileza insira um valor numerico");
 				continue;
 
-			}
-
-			if (choice == 1) {
-				LoggerUtility.info("Nivel de trabalho validado: ", workLevel);
-				confirm = true;
-			} else {
-				System.out.println("Ok, tente novamente.");
 			}
 
 		}
