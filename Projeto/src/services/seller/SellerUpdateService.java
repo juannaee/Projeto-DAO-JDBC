@@ -70,7 +70,7 @@ class SellerUpdateService {
 				break;
 
 			default:
-				LoggerUtility.error("Opção invalida!\nOpção digitada: ", option);
+				LoggerUtility.error("Opção invalida!\nOpção digitada: " + option);
 				continue;
 			}
 		}
@@ -89,15 +89,15 @@ class SellerUpdateService {
 				choice = Integer.parseInt(sc.nextLine());
 
 				if (!newName.trim().isEmpty() && choice == 1) {
-					LoggerUtility.info("Nome de funcionario validado: ", newName);
+					LoggerUtility.info("Nome de funcionario validado: " + newName);
 					seller.setNameSeller(newName);
 					confirm = true;
 				} else {
-					LoggerUtility.warn("Nome invalidado: ", newName, ". Tente novamente");
+					LoggerUtility.warn("Nome invalidado: " + newName + ". Tente novamente");
 					continue;
 				}
 			} catch (NumberFormatException e) {
-				LoggerUtility.error("Opção: ", choice, " inválida tente novamente.");
+				LoggerUtility.error("Opção: " + choice + " inválida tente novamente.");
 				continue;
 			}
 		}
@@ -119,20 +119,20 @@ class SellerUpdateService {
 				System.out.println("A data de nascimento: " + birthDate + ". Está correta? (1 - Sim / Outro - Não");
 				choice = Integer.parseInt(sc.nextLine());
 				if (choice == 1) {
-					LoggerUtility.info("Data de aniversario de funcionario validada: ", birthDate);
+					LoggerUtility.info("Data de aniversario de funcionario validada: " + birthDate);
 					seller.setBirthDate(birthDate);
 					confirm = true;
 				} else {
-					System.out.println("Ok, tente novamente.");
+					System.out.println("Ok+ tente novamente.");
 					continue;
 				}
 
 			} catch (NumberFormatException e) {
-				LoggerUtility.error("Opção: ", choice, " inválida tente novamente.");
+				LoggerUtility.error("Opção: " + choice + " inválida tente novamente.");
 				continue;
 
 			} catch (ParseException e) {
-				LoggerUtility.error("Formato de data invalida: ", birthDate, "\nTente novamente.");
+				LoggerUtility.error("Formato de data invalida: " + birthDate + "\nTente novamente.");
 				continue;
 			}
 
@@ -141,36 +141,69 @@ class SellerUpdateService {
 	}
 
 	private static void updateSellerBaseSalary(Scanner sc, Seller seller) {
-		System.out.println("Digite o novo salario base: ");
-		try {
-			double newSalary = sc.nextDouble();
-			sc.nextLine();
-			if (newSalary > 0) {
-				seller.setBaseSalary(newSalary);
-			} else {
-				LoggerUtility.warn("Salario invalido: ", newSalary);
+		boolean confirm = false;
+		int choice = 0;
+		Double newSalary = 0.0;
+
+		while (!confirm) {
+			System.out.println("Digite o novo salario base: ");
+			try {
+				newSalary = Double.parseDouble(sc.nextLine());
+				System.out.println("o salário base: " + newSalary + ". Está correto? (1 - Sim / Outro - Não");
+				try {
+					choice = Integer.parseInt(sc.nextLine());
+				} catch (NumberFormatException e) {
+					LoggerUtility.error("Entrada:" + choice + " invalida+ por gentileza insira um valor numerico");
+					continue;
+				}
+				if (newSalary > 0 && choice == 1) {
+					seller.setBaseSalary(newSalary);
+				} else {
+					LoggerUtility.warn("Salario invalidado: " + newSalary + ". Tente novamente.");
+					continue;
+				}
+			} catch (NumberFormatException e) {
+				LoggerUtility.error(
+						"Entrada:" + newSalary + " invalida para salário base+ por gentileza insira um valor numerico");
+				continue;
 			}
-		} catch (InputMismatchException e) {
-			LoggerUtility.error("Erro:\nEntrada invalidada, por gentileza insira um valor numerico\nCausa: ",
-					e.getCause());
-			sc.nextLine();
-			return;
 		}
 	}
 
 	private static void updateSellerDepartment(Scanner sc, Seller seller) {
-		System.out.println("Escolha o novo departamento");
+		boolean confirm = false;
+		int choice = 0;
+		int departmentId = 0;
+		Department department = null;
 		DepartmentDao departmentDao = DaoFactory.createDepartmentDaoJDBC();
-		System.out.println(departmentDao.findAll());
-		int departmentId = sc.nextInt();
-		sc.nextLine();
-		Department department = departmentDao.findById(departmentId);
-		if (department != null) {
-			seller.setDepartment(department);
 
-		} else {
-			LoggerUtility.warn("Departamento não encontrado: ", department);
+		while (!confirm) {
+			System.out.println("Escolha o novo departamento");
+			System.out.println(departmentDao.findAll());
+			try {
+				departmentId = Integer.parseInt(sc.nextLine());
+				department = departmentDao.findById(departmentId);
+				try {
+					System.out.println("o departamento: " + department + "Está correto? (1 - Sim / Outro - Não");
+					choice = Integer.parseInt(sc.nextLine());
+				} catch (NumberFormatException e) {
+					LoggerUtility.error("Entrada:" + choice + " invalidada por gentileza insira um valor numerico");
+					continue;
+				}
+				if (department != null && choice == 1) {
+					LoggerUtility.info("Departamento validado: " + department);
+					seller.setDepartment(department);
+					confirm = true;
+
+				} else {
+					LoggerUtility.warn("Departamento não validado: " + department + ". Tente novamente");
+				}
+			} catch (NumberFormatException e) {
+				LoggerUtility.error("Entrada:" + departmentId + " invalidada por gentileza insira um valor numerico");
+				continue;
+			}
 		}
+
 	}
 
 	private static void updateSellerWorkLevel(Scanner sc, Seller seller) {
@@ -189,7 +222,7 @@ class SellerUpdateService {
 			seller.setWorkLevel(WorkLevel.SENIOR);
 			break;
 		default:
-			LoggerUtility.warn("Opção inválida para nível de trabalho: ", workLevelChoice);
+			LoggerUtility.warn("Opção inválida para nível de trabalho: " + workLevelChoice);
 		}
 
 	}
