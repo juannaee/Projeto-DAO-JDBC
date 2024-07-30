@@ -5,6 +5,7 @@ import java.util.Scanner;
 import model.dao.DaoFactory;
 import model.dao.DepartmentDao;
 import model.entities.Department;
+import utilities.LoggerUtility;
 
 public class DepartmentService {
 	private static DepartmentDao departmentDao = DaoFactory.createDepartmentDaoJDBC();
@@ -12,44 +13,58 @@ public class DepartmentService {
 	private static Department departmentObj;
 
 	public static void mainDepartment(Scanner sc) {
-		int option;
-		do {
-			System.out.println(
-					"Escolha uma das opções\n1 - Mostrar Departamentos\n2 - Inserir Departamentos\n3 - Procurar por ID\n4 - Deletar Departamento\n5 - Atualizar dados \n9 - Sair");
-			option = sc.nextInt();
-			sc.nextLine();
-			System.out.println();
+		int option = 0;
+		boolean confirm = false;
 
-			if (option == 1) {
-				showDepartments();
+		while (!confirm) {
+			try {
+				System.out.println(
+						"Escolha uma das opções\n1 - Mostrar Departamentos\n2 - Inserir Departamentos\n3 - Procurar por ID\n4 - Deletar Departamento\n5 - Atualizar dados \n9 - Sair");
+				option = Integer.parseInt(sc.nextLine());
+
 				System.out.println();
 
-			} else if (option == 2) {
-				departmentInsert(sc);
-				System.out.println();
+				if (option == 1) {
+					showDepartments();
+					System.out.println();
+					continue;
 
-			} else if (option == 3) {
-				findById(sc);
-				System.out.println();
+				} else if (option == 2) {
+					departmentInsert(sc);
+					System.out.println();
+					continue;
 
-			} else if (option == 4) {
-				deleteById(sc);
-				System.out.println();
+				} else if (option == 3) {
+					findById(sc);
+					System.out.println();
+					continue;
 
-			} else if (option == 5) {
-				updateDepartment(sc);
-				System.out.println();
-			} else if (option == 9) {
-				System.out.println("Saindo...");
-				System.out.println();
+				} else if (option == 4) {
+					deleteById(sc);
+					System.out.println();
+					continue;
 
-			} else {
-				System.out.println("Opção invalida");
-				System.out.println();
+				} else if (option == 5) {
+					updateDepartment(sc);
+					System.out.println();
+					continue;
+				} else if (option == 9) {
+					System.out.println("Saindo...");
+					System.out.println();
+					confirm = true;
 
+				} else {
+					System.out.println("Opção invalida, tente novamente");
+					System.out.println();
+					continue;
+
+				}
+
+			} catch (NumberFormatException e) {
+				LoggerUtility.error("Entrada: " + option + ". Tente novamente");
+				continue;
 			}
-
-		} while (option != 9);
+		}
 
 	}
 
@@ -72,32 +87,44 @@ public class DepartmentService {
 
 	private static Department findById(Scanner sc) {
 
-		System.out.println("Digite um numero ID");
-		int id = sc.nextInt();
-		Department objId = departmentDao.findById(id);
-		if (objId != null) {
-			System.out.println("Departamento encontrado:");
-			System.out.println(objId);
-			return objId;
-		} else {
-			System.out.println("Departamento inexistente");
-			return objId;
+		int id = 0;
+		try {
+			System.out.println("Digite um numero ID");
+			id = Integer.parseInt(sc.nextLine());
+			Department objId = departmentDao.findById(id);
+			if (objId != null) {
+				System.out.println("Departamento encontrado:");
+				System.out.println(objId);
+				return objId;
+			} else {
+				LoggerUtility.warn("ID: " + id + " inexistente, tente novamente");
+				return null;
+			}
+		} catch (NumberFormatException e) {
+			LoggerUtility.error("ID não validado, Tente novamente");
+			return null;
 		}
 
 	}
 
 	private static void deleteById(Scanner sc) {
+		int id = 0;
 
 		if (departmentDao.findAll().isEmpty()) {
+			LoggerUtility.warn("Não existem departamentos ativos para deleção");
 			return;
 		}
 
 		showDepartments();
-		System.out.println("Digite um id para excluir um departamento: ");
-		int id = sc.nextInt();
-		System.out.println();
-		departmentDao.deleteById(id);
-		System.out.println();
+		try {
+			System.out.println("Digite um id para excluir um departamento: ");
+			id = Integer.parseInt(sc.nextLine());
+			System.out.println();
+			departmentDao.deleteById(id);
+			System.out.println();
+		} catch (NumberFormatException e) {
+			LoggerUtility.error("ID não validado, Tente novamente");
+		}
 
 	}
 

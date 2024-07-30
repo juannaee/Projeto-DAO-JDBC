@@ -1,4 +1,5 @@
 package services;
+
 import java.util.Scanner;
 import model.dao.DaoFactory;
 import model.dao.WorkLevelDao;
@@ -9,24 +10,34 @@ public class WorkLevelService {
 	private static WorkLevelDao workLevel = DaoFactory.createWorkLevelDaoJDBC();
 
 	public static void mainWorkLevel(Scanner sc) {
-		int option;
+		int option = 0;
+		boolean confirm = false;
 
-		do {
+		while (!confirm) {
 
-			System.out.println("Escolha uma das opções\n1 - Mostrar Niveis de trabalho\n2 - Sair");
-			option = sc.nextInt();
+			try {
+				System.out.println("Escolha uma das opções\n1 - Mostrar Niveis de trabalho\n2 - Sair");
+				option = Integer.parseInt(sc.nextLine());
 
-			if (option == 1) {
-				showWorkLevels();
-			} else if (option == 2) {
-				System.out.println("Saindo........");
-				System.out.println();
-			} else {
-				System.out.println("Opção invalida");
-				System.out.println();
+				if (option == 1) {
+					showWorkLevels();
+					continue;
+				} else if (option == 2) {
+					System.out.println("Saindo........");
+					System.out.println();
+					confirm = true;
+				} else {
+					System.out.println("Opção invalida, tente novamente");
+					System.out.println();
+					continue;
+				}
+
+			} catch (NumberFormatException e) {
+				LoggerUtility.error("Entrada: " + option + ". Tente novamente");
+				continue;
+
 			}
-
-		} while (option != 2);
+		}
 
 	}
 

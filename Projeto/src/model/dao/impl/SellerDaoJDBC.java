@@ -161,7 +161,7 @@ public class SellerDaoJDBC implements SellerDao {
 
 			return null;
 		} catch (SQLException e) {
-			LoggerUtility.error("Erro no metodo findById (Classe: SellerDaoJDBC)\nMotivo: ", e.getMessage());
+			LoggerUtility.error("Erro no metodo findById (Classe: SellerDaoJDBC)\nMotivo: " + e.getMessage());
 			throw new DbException("Erro ao buscar o funcionario por ID: " + e.getMessage());
 		}
 

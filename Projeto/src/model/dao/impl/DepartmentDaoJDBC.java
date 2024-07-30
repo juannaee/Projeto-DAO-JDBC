@@ -119,7 +119,7 @@ public class DepartmentDaoJDBC implements DepartmentDao {
 					return dep;
 				}
 			}
-			LoggerUtility.warn("Departamento não encontrado. ID: " + id);
+			
 			return null;
 		} catch (SQLException e) {
 			LoggerUtility.error("Erro no método findById");
