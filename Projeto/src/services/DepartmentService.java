@@ -17,6 +17,7 @@ public class DepartmentService {
 			System.out.println(
 					"Escolha uma das opções\n1 - Mostrar Departamentos\n2 - Inserir Departamentos\n3 - Procurar por ID\n4 - Deletar Departamento\n5 - Atualizar dados \n9 - Sair");
 			option = sc.nextInt();
+			sc.nextLine();
 			System.out.println();
 
 			if (option == 1) {

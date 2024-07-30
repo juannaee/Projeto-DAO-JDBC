@@ -2,7 +2,6 @@ package services.seller;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import model.dao.DaoFactory;
@@ -157,7 +156,9 @@ class SellerUpdateService {
 					continue;
 				}
 				if (newSalary > 0 && choice == 1) {
+					LoggerUtility.info("Salário base validado: " + newSalary);
 					seller.setBaseSalary(newSalary);
+					confirm = true;
 				} else {
 					LoggerUtility.warn("Salario invalidado: " + newSalary + ". Tente novamente.");
 					continue;
